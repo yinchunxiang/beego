@@ -115,8 +115,10 @@ var (
 )
 
 func init() {
+	/// 获得可执行文件的绝对路径
 	AppPath, _ = filepath.Abs(filepath.Dir(os.Args[0]))
 
+	/// 进入可执行文件所在目录
 	os.Chdir(AppPath)
 
 	BConfig = &Config{
@@ -133,6 +135,7 @@ func init() {
 			Graceful:      false,
 			ServerTimeOut: 0,
 			ListenTCP4:    false,
+			///默认使用http服务
 			EnableHTTP:    true,
 			HTTPAddr:      "",
 			HTTPPort:      8080,

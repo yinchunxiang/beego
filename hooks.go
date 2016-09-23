@@ -62,6 +62,10 @@ func registerSession() error {
 		if GlobalSessions, err = session.NewManager(BConfig.WebConfig.Session.SessionProvider, sessionConfig); err != nil {
 			return err
 		}
+		///怎么让这个GC终止？
+		///要是main退出了，这个还是继续？
+		///经测试，在程序退出的时候，这个也就会退出了
+		///TODO: 查查Go规范的说明
 		go GlobalSessions.GC()
 	}
 	return nil

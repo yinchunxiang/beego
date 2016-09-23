@@ -51,6 +51,7 @@ func AddAPPStartHook(hf hookfunc) {
 // beego.Run(":8089")
 // beego.Run("127.0.0.1:8089")
 func Run(params ...string) {
+	/// 依次执行注册的所有钩子函数
 	initBeforeHTTPRun()
 
 	if len(params) > 0 && params[0] != "" {

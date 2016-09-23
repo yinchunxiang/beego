@@ -52,6 +52,7 @@ func NewApp() *App {
 
 // Run beego application.
 func (app *App) Run() {
+	/// 这就是之前获取的ip
 	addr := BConfig.Listen.HTTPAddr
 
 	if BConfig.Listen.HTTPPort != 0 {
@@ -152,11 +153,14 @@ func (app *App) Run() {
 			}
 		}()
 	}
+
+
+	///默认启动http服务
 	if BConfig.Listen.EnableHTTP {
 		go func() {
 			app.Server.Addr = addr
 			BeeLogger.Info("http server Running on %s", app.Server.Addr)
-			if BConfig.Listen.ListenTCP4 {
+			if BConfig.Listen.ListenTCP4 {///这里默认是false
 				ln, err := net.Listen("tcp4", app.Server.Addr)
 				if err != nil {
 					BeeLogger.Critical("ListenAndServe: ", err)
@@ -173,12 +177,15 @@ func (app *App) Run() {
 			} else {
 				if err := app.Server.ListenAndServe(); err != nil {
 					BeeLogger.Critical("ListenAndServe: ", err)
+					///为什么这里要sleep100ms?
 					time.Sleep(100 * time.Microsecond)
 					endRunning <- true
 				}
 			}
 		}()
 	}
+	///等待直到endRunning有写入，表示程序退出
+	///无缓冲channel会阻塞等待可读事件
 	<-endRunning
 }
 
