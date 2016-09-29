@@ -67,6 +67,8 @@ func (ini *IniConfig) parseFile(name string) (*IniConfigContainer, error) {
 	defer cfg.Unlock()
 	defer file.Close()
 
+	///为什么要check BOM?
+	///BOM是什么？
 	var comment bytes.Buffer
 	buf := bufio.NewReader(file)
 	// check the BOM
