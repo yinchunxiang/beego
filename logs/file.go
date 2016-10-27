@@ -127,6 +127,7 @@ func (w *fileLogWriter) WriteMsg(when time.Time, msg string, level int) error {
 	}
 	h, d := formatTimeHeader(when)
 	msg = string(h) + msg + "\n"
+	///注意：这里进行了2次needRotate判断
 	if w.Rotate {
 		if w.needRotate(len(msg), d) {
 			w.Lock()
