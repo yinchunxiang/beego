@@ -23,7 +23,7 @@ import (
 
 const (
 	// VERSION represent beego web framework version.
-	VERSION = "1.6.1"
+	VERSION = "1.7.1"
 
 	// DEV is for develop
 	DEV = "dev"
@@ -72,9 +72,9 @@ func initBeforeHTTPRun() {
 	AddAPPStartHook(registerMime)
 	AddAPPStartHook(registerDefaultErrorHandler)
 	AddAPPStartHook(registerSession)
-	AddAPPStartHook(registerDocs)
 	AddAPPStartHook(registerTemplate)
 	AddAPPStartHook(registerAdmin)
+	AddAPPStartHook(registerGzip)
 
 	for _, hk := range hooks {
 		if err := hk(); err != nil {
@@ -85,8 +85,16 @@ func initBeforeHTTPRun() {
 
 // TestBeegoInit is for test package init
 func TestBeegoInit(ap string) {
-	os.Setenv("BEEGO_RUNMODE", "test")
-	appConfigPath = filepath.Join(ap, "conf", "app.conf")
+	path := filepath.Join(ap, "conf", "app.conf")
 	os.Chdir(ap)
+	InitBeegoBeforeTest(path)
+}
+
+// InitBeegoBeforeTest is for test package init
+func InitBeegoBeforeTest(appConfigPath string) {
+	if err := LoadAppConfig(appConfigProvider, appConfigPath); err != nil {
+		panic(err)
+	}
+	BConfig.RunMode = "test"
 	initBeforeHTTPRun()
 }
